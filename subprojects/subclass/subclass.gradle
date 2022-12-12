@@ -1,0 +1,9 @@
+description = "Mockito preconfigured subclass mock maker"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+
+dependencies {
+    api project.rootProject
+}
+
+tasks.javadoc.enabled = false
