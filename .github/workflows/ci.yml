@@ -70,7 +70,18 @@ jobs:
         MOCK_MAKER: ${{ matrix.entry.mock-maker }}
         MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
-    - name: 7. Upload coverage report
+    - name: 7. Setup Android SDK
+      if: matrix.java == 11
+      uses: android-actions/setup-android@v2
+
+    - name: 8. Run Android tests on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+      if: matrix.java == 11
+      run: ./gradlew :androidTest:check
+      env:
+        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
+
+    - name: 9. Upload coverage report
       run: |
         ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
         curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
